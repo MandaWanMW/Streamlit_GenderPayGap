@@ -1,13 +1,8 @@
 import pandas as pd
 import plotly.express as px
-import plotly.offline as py
-import plotly.graph_objs as go
-from plotly.figure_factory import create_table
 import altair as alt
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # streamlit run main.py
 
@@ -129,9 +124,8 @@ left_column, right_column = st.columns(2)
 # --------------- Tab --------------- #
 
 # Create Tabs
-tab1, tab2, tab3, tab4 = st.tabs([
-  "T1", "T2",
-  "T3", "T4"
+tab1, tab2, tab3 = st.tabs([
+  "Gapminder Chart", "Comparison of Sector and Pay Gap", "Moving Average (MA)"
 ])
 
 with tab1:
