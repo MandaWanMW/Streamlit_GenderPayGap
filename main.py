@@ -46,10 +46,10 @@ st.title("Dashboard for Gender Pay Gap in Europe :bar_chart:")
 
 gapminder = px.scatter(df_year, x='GDP', y=sel_sector, color='Country',
                        size='Urban_population', size_max=10,
-                       title='Gapminder Chart by Year for Selected Sector',
+                       title=f'Gapminder Chart by Year for {sel_sector} Sector',
                        animation_frame='Year', animation_group='Country',
                        hover_name='Country', range_y=[-50, 80],
-                       labels={sel_sector: f"Gender Pay Gap in {sel_sector} Sector (%)"})
+                       labels={sel_sector: "Gender Pay Gap (%)"})
 
 # --------------- Bar Chart - Gender Pay Gap by Sector --------------- #
 
@@ -63,7 +63,8 @@ df_latest_data_gap = df_latest_data.iloc[:, 5:].transpose().reset_index(drop=Fal
 
 # Create chart
 barchart_sector = alt.Chart(df_latest_data_gap,
-                  title=f"Comparison of Pay Gap in Different Sectors in {sel_country}, {df_year_country['Year'].max()}"
+                            title=f"Comparison of Pay Gap in Different Sectors in {sel_country}, "
+                                  f"{df_year_country['Year'].max()}"
                   ).mark_bar().encode(
     x=alt.X("Pay_gap", axis=alt.Axis(title="Pay gap in the sector(%)")),
     y=alt.Y("Sector", sort='-x'),
@@ -104,7 +105,7 @@ df_ma_melted = pd.melt(df_ma, id_vars=["Year"],
 
 # Create MA linechart
 linechart_ma = alt.Chart(df_ma_melted,
-                         title=f"Trends in {sel_sector} Sector and Moving Averages (MA), "
+                         title=f"Trends in {sel_sector} Sector and Moving Averages (MA) in {sel_country}, "
                                f"{df_year_country['Year'].min()} - {df_year_country['Year'].max()}"
                          ).mark_line().encode(
     x=alt.X('Year', axis=alt.Axis(format='d')),
