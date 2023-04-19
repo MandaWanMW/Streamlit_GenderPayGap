@@ -66,7 +66,7 @@ barchart_sector = alt.Chart(df_latest_data_gap,
                             title=f"Comparison of Pay Gap in Different Sectors in {sel_country}, "
                                   f"{df_year_country['Year'].max()}"
                   ).mark_bar().encode(
-    x=alt.X("Pay_gap", axis=alt.Axis(title="Pay gap in the sector(%)")),
+    x=alt.X("Pay_gap", axis=alt.Axis(title="Gender Pay Gap (%)")),
     y=alt.Y("Sector", sort='-x'),
         # The highlight will be set on the result of a conditional statement
         color=alt.condition(
