@@ -49,7 +49,8 @@ gapminder = px.scatter(df_year, x='GDP', y=sel_sector, color='Country',
                        title=f'Gapminder Chart by Year for {sel_sector} Sector',
                        animation_frame='Year', animation_group='Country',
                        hover_name='Country', range_y=[-50, 80],
-                       labels={sel_sector: "Gender Pay Gap (%)"})
+                       labels={sel_sector: "Gender Pay Gap (%)",
+                               'GDP': "GDP per capita (euros)"})
 
 # --------------- Bar Chart - Gender Pay Gap by Sector --------------- #
 
@@ -65,15 +66,15 @@ df_latest_data_gap = df_latest_data.iloc[:, 5:].transpose().reset_index(drop=Fal
 barchart_sector = alt.Chart(df_latest_data_gap,
                             title=f"Comparison of Pay Gap in Different Sectors in {sel_country}, "
                                   f"{df_year_country['Year'].max()}"
-                  ).mark_bar().encode(
+                            ).mark_bar().encode(
     x=alt.X("Pay_gap", axis=alt.Axis(title="Gender Pay Gap (%)")),
     y=alt.Y("Sector", sort='-x'),
-        # The highlight will be set on the result of a conditional statement
-        color=alt.condition(
+    # The highlight will be set on the result of a conditional statement
+    color=alt.condition(
         (alt.datum.Pay_gap == df_latest_data_gap['Pay_gap'].max()) |
         (alt.datum.Pay_gap == df_latest_data_gap['Pay_gap'].min()),
-            alt.value('orange'),     # Highlight
-            alt.value('steelblue')   # If it's not true it sets the bar steelblue.
+        alt.value('orange'),     # Highlight
+        alt.value('steelblue')   # If it's not true it sets the bar steelblue.
         )
 ).properties(width=700)
 
@@ -117,7 +118,7 @@ linechart_ma = alt.Chart(df_ma_melted,
 
 st.markdown("**:blue[Key Metrics]**")
 
-#Display KPI's Metrics
+# Display KPI's Metrics
 left_column, right_column = st.columns(2)
 
 # Select data in the latest year
@@ -132,9 +133,9 @@ max_country = df_year.iloc[max_row_idx[0], 1]
 # If no data can be found from the previous year
 try:
     # The pay gap in the previous year
-    max_lastyr = df_year.loc[
+    max_previous = df_year.loc[
         (df_year['Country'] == max_country) & (df_year['Year'] == (df_year['Year'].max() - 1)), max_sector].values[0]
-    max_growth = f"{(max_value - max_lastyr):,.2f}%"
+    max_growth = f"{(max_value - max_previous):,.2f}%"
 except:
     max_growth = "No data from the previous year"
 
@@ -149,9 +150,9 @@ min_country = df_year.iloc[min_row_idx[0], 1]
 # If no data can be found from the previous year
 try:
     # The pay gap in the previous year
-    min_lastyr = df_year.loc[
+    min_previous = df_year.loc[
         (df_year['Country'] == min_country) & (df_year['Year'] == (df_year['Year'].max() - 1)), min_sector].values[0]
-    min_growth = f"{(min_value - min_lastyr):,.2f}%"
+    min_growth = f"{(min_value - min_previous):,.2f}%"
 except:
     min_growth = "No data from the previous year"
 
