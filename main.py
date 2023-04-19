@@ -53,7 +53,7 @@ gapminder = px.scatter(df_year, x='GDP', y=sel_sector, color='Country',
 
 # --------------- Bar Chart - Gender Pay Gap by Sector --------------- #
 
-# Select data in 2021
+# Select data in the latest year
 df_latest_data = df_year_country.loc[df_year_country['Year'] == df_year_country['Year'].max()]
 
 # Select pay gaps columns, transpose the df, reset index, and add header,
@@ -120,7 +120,50 @@ st.markdown("**:blue[Key Metrics]**")
 #Display KPI's Metrics
 left_column, right_column = st.columns(2)
 
+# Select data in the latest year
+# Find the max pay gap among all the sectors
+max_value = df_year.loc[df_year['Year'] == df_year['Year'].max()].iloc[:, 5:].max().max()
+# Find the column and row of the max pay gap among all the sectors
+max_row_idx, max_col_idx = np.where(df_year.iloc[:, 5:] == max_value)
+# The sector with max pay gap
+max_sector = df_year.columns[max_col_idx[0]+5]
+# The sector with min pay gap
+max_country = df_year.iloc[max_row_idx[0], 1]
+# If no data can be found from the previous year
+try:
+    # The pay gap in the previous year
+    max_lastyr = df_year.loc[
+        (df_year['Country'] == max_country) & (df_year['Year'] == (df_year['Year'].max() - 1)), max_sector].values[0]
+    max_growth = f"{(max_value - max_lastyr):,.2f}%"
+except:
+    max_growth = "No data from the previous year"
 
+# Find the min pay gap among all the sectors
+min_value = df_year.loc[df_year['Year'] == df_year['Year'].max()].iloc[:, 5:].min().min()
+# Find the column and row of the min pay gap among all the sectors
+min_row_idx, min_col_idx = np.where(df_year.iloc[:, 5:] == min_value)
+# The sector with min pay gap
+min_sector = df_year.columns[min_col_idx[0]+5]
+# The sector with min pay gap
+min_country = df_year.iloc[min_row_idx[0], 1]
+# If no data can be found from the previous year
+try:
+    # The pay gap in the previous year
+    min_lastyr = df_year.loc[
+        (df_year['Country'] == min_country) & (df_year['Year'] == (df_year['Year'].max() - 1)), min_sector].values[0]
+    min_growth = f"{(min_value - min_lastyr):,.2f}%"
+except:
+    min_growth = "No data from the previous year"
+
+# Card-Left for max
+left_column.metric(f"Maximum Pay Gap, {df_year['Year'].max()} @ {max_country}({max_sector})",
+                   f"{max_value:,.2f}%",
+                   f"{max_growth}")  # Growth
+
+# Card-Right for min
+right_column.metric(f"Minimum Pay Gap, {df_year['Year'].max()} @ {min_country}({min_sector})",
+                    f"{min_value:,.2f}%",
+                    f"{min_growth}")  # Growth
 
 # --------------- Tab --------------- #
 
